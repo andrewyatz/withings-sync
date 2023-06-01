@@ -13,42 +13,22 @@ from withings_sync.garmin import GarminConnect
 from withings_sync.trainerroad import TrainerRoad
 from withings_sync.fit import FitEncoderWeight, FitEncoderBloodPressure
 
-try:
-    with open("/run/secrets/garmin_username", encoding="utf-8") as secret:
-        GARMIN_USERNAME = secret.read().strip("\n")
-except OSError:
-    GARMIN_USERNAME = ""
+def get_secret_from_file_and_env(file, env_var):
+    SECRETS_PATH=os.getenv("SECRETS_PATH", default="/run/secrets")
+    data=""
+    try:
+        with open(os.path.join(SECRETS_PATH, file), encoding="utf-8") as secret:
+            data = secret.read().strip("\n")
+    except OSError:
+        data = ""
+    if env_var in os.environ:
+        data = os.getenv(env_var)
+    return data
 
-try:
-    with open("/run/secrets/garmin_password", encoding="utf-8") as secret:
-        GARMIN_PASSWORD = secret.read().strip("\n")
-except OSError:
-    GARMIN_PASSWORD = ""
-
-if "GARMIN_USERNAME" in os.environ:
-    GARMIN_USERNAME = os.getenv("GARMIN_USERNAME")
-
-if "GARMIN_PASSWORD" in os.environ:
-    GARMIN_PASSWORD = os.getenv("GARMIN_PASSWORD")
-
-try:
-    with open("/run/secrets/trainerroad_username", encoding="utf-8") as secret:
-        TRAINERROAD_USERNAME = secret.read().strip("\n")
-except OSError:
-    TRAINERROAD_USERNAME = ""
-
-try:
-    with open("/run/secrets/trainerroad_password", encoding="utf-8") as secret:
-        TRAINERROAD_PASSWORD = secret.read().strip("\n")
-except OSError:
-    TRAINERROAD_PASSWORD = ""
-
-if "TRAINERROAD_USERNAME" in os.environ:
-    TRAINERROAD_USERNAME = os.getenv("TRAINERROAD_USERNAME")
-
-if "TRAINERROAD_PASSWORD" in os.environ:
-    TRAINERROAD_PASSWORD = os.getenv("TRAINERROAD_PASSWORD")
-
+GARMIN_USERNAME = get_secret_from_file("garmin_username", GARMIN_USERNAME)
+GARMIN_PASSWORD = get_secret_from_file("garmin_password", GARMIN_PASSWORD)
+TRAINERROAD_USERNAME = get_secret_from_file("garmin_username", TRAINERROAD_USERNAME)
+TRAINERROAD_PASSWORD = get_secret_from_file("garmin_username", TRAINERROAD_PASSWORD)
 
 def get_args():
     """get command-line arguments"""
