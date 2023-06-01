@@ -70,6 +70,8 @@ You can also populate the following 'secrets' files to provide the Garmin and/or
 - `/run/secrets/trainerroad_username`
 - `/run/secrets/trainerroad_password`
 
+You can also change the default directory from `/run/secrets` by providing the environment variable `SECRETS_PATH`. 
+
 Secrets are useful in an orchestrated container context — see the [Docker Swarm](https://docs.docker.com/engine/swarm/secrets/) or [Rancher](https://rancher.com/docs/rancher/v1.6/en/cattle/secrets/) docs for more information on how to securely inject secrets into a container.
 
 ### Order of priority for credentials
